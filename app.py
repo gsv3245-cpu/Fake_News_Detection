@@ -398,76 +398,44 @@ elif "📊 Model Analytics" in page:
         st.stop()
 
     # Metric cards
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2 = st.columns(2)
     with c1:
+        accuracy = metrics.get('accuracy', 0) * 100
         st.markdown(f"""<div class="metric-card">
-            <div class="metric-value">{metrics['test_accuracy']}%</div>
+            <div class="metric-value">{accuracy:.2f}%</div>
             <div class="metric-label">Test Accuracy</div>
         </div>""", unsafe_allow_html=True)
     with c2:
         st.markdown(f"""<div class="metric-card">
-            <div class="metric-value">{metrics['epochs_run']}</div>
-            <div class="metric-label">Epochs Trained</div>
-        </div>""", unsafe_allow_html=True)
-    with c3:
-        best_val = max(metrics['val_accuracy'])
-        st.markdown(f"""<div class="metric-card">
-            <div class="metric-value">{best_val}%</div>
-            <div class="metric-label">Best Val Accuracy</div>
-        </div>""", unsafe_allow_html=True)
-    with c4:
-        min_loss = min(metrics['val_loss'])
-        st.markdown(f"""<div class="metric-card">
-            <div class="metric-value">{min_loss}</div>
-            <div class="metric-label">Min Val Loss</div>
+            <div class="metric-value">Bi-LSTM</div>
+            <div class="metric-label">Model Architecture</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown('<div class="section-title">Training Accuracy</div>', unsafe_allow_html=True)
-        fig, ax = plt.subplots(figsize=(6, 3.5))
-        fig.patch.set_facecolor('#0d0d1a')
-        ax.set_facecolor('#0d0d1a')
-        epochs = list(range(1, len(metrics['train_accuracy']) + 1))
-        ax.plot(epochs, metrics['train_accuracy'], color='#f4a261', linewidth=2.5, label='Train', marker='o', markersize=4)
-        ax.plot(epochs, metrics['val_accuracy'], color='#e63946', linewidth=2.5, label='Validation', marker='s', markersize=4, linestyle='--')
-        ax.set_xlabel('Epoch', color='#888')
-        ax.set_ylabel('Accuracy (%)', color='#888')
-        ax.tick_params(colors='#888')
-        ax.legend(facecolor='#1a1a2e', labelcolor='#e0e0e0', framealpha=0.8)
-        for spine in ax.spines.values():
-            spine.set_color('#2a2a4a')
-        ax.grid(True, alpha=0.1, color='#ffffff')
-        plt.tight_layout()
-        st.pyplot(fig)
-        plt.close()
-
-    with col2:
-        st.markdown('<div class="section-title">Training Loss</div>', unsafe_allow_html=True)
-        fig, ax = plt.subplots(figsize=(6, 3.5))
-        fig.patch.set_facecolor('#0d0d1a')
-        ax.set_facecolor('#0d0d1a')
-        ax.plot(epochs, metrics['train_loss'], color='#f4a261', linewidth=2.5, label='Train', marker='o', markersize=4)
-        ax.plot(epochs, metrics['val_loss'], color='#e63946', linewidth=2.5, label='Validation', marker='s', markersize=4, linestyle='--')
-        ax.set_xlabel('Epoch', color='#888')
-        ax.set_ylabel('Loss', color='#888')
-        ax.tick_params(colors='#888')
-        ax.legend(facecolor='#1a1a2e', labelcolor='#e0e0e0', framealpha=0.8)
-        for spine in ax.spines.values():
-            spine.set_color('#2a2a4a')
-        ax.grid(True, alpha=0.1, color='#ffffff')
-        plt.tight_layout()
-        st.pyplot(fig)
-        plt.close()
-
-    # Confusion matrix image
-    cm_path = os.path.join(MODEL_DIR, "confusion_matrix.png")
-    if os.path.exists(cm_path):
-        st.markdown('<div class="section-title">Confusion Matrix</div>', unsafe_allow_html=True)
-        st.image(cm_path, width=400)
+    # Confusion Matrix
+    st.markdown('<div class="section-title">Confusion Matrix</div>', unsafe_allow_html=True)
+    cm = np.array(metrics.get('confusion_matrix', [[0, 0], [0, 0]]))
+    
+    fig, ax = plt.subplots(figsize=(6, 5))
+    fig.patch.set_facecolor('#0d0d1a')
+    ax.set_facecolor('#0d0d1a')
+    
+    import seaborn as sns
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['Fake', 'Real'],
+                yticklabels=['Fake', 'Real'],
+                cbar_kws={'label': 'Count'},
+                ax=ax)
+    ax.set_xlabel('Predicted', color='#e0e0e0', fontsize=12)
+    ax.set_ylabel('True Label', color='#e0e0e0', fontsize=12)
+    ax.tick_params(colors='#888')
+    for spine in ax.spines.values():
+        spine.set_color('#2a2a4a')
+    
+    plt.tight_layout()
+    st.pyplot(fig)
+    plt.close()
 
     # Architecture
     st.markdown('<div class="section-title">Model Architecture</div>', unsafe_allow_html=True)
