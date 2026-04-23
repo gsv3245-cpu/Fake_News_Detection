@@ -29,18 +29,14 @@ fake_news_detection/
 
 ## 🚀 Setup & Run
 
-### Step 1 — Install Dependencies
+### Local Setup ✅ (Recommended for Development)
+
+#### Step 1 — Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 2 — Download Dataset
-Download from Kaggle:
-👉 https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset
-
-Place `True.csv` and `Fake.csv` in the **same folder** as `model_training.py`.
-
-### Step 3 — Train the Model
+#### Step 2 — Train the Model
 ```bash
 python model_training.py
 ```
@@ -48,15 +44,32 @@ This will:
 - Preprocess and clean the text data
 - Tokenize and pad sequences
 - Train a Bidirectional LSTM model
-- Save the model, tokenizer, plots, and metrics to `model_artifacts/`
+- Save the model, tokenizer, plots, and metrics to `Artifacts/`
 
 ⏱️ Training time: ~10–20 minutes depending on your hardware.
 
-### Step 4 — Launch Dashboard
+#### Step 3 — Launch Dashboard
 ```bash
 streamlit run app.py
 ```
 Open your browser at `http://localhost:8501`
+
+---
+
+## ☁️ Cloud Deployment
+
+**⚠️ Note:** Streamlit Cloud uses Python 3.14+ which doesn't support TensorFlow.
+
+### Recommended: Hugging Face Spaces 🤗
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete setup guide.
+
+### Docker Options
+- Railway.app
+- Render.com
+- Any Docker-compatible platform
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 ---
 
