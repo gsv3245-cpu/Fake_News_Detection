@@ -16,8 +16,16 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 nltk.download('stopwords', quiet=True)
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+# Graceful TensorFlow import with error handling
+try:
+    from tensorflow.keras.models import load_model
+    from tensorflow.keras.preprocessing.sequence import pad_sequences
+    TENSORFLOW_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    TENSORFLOW_AVAILABLE = False
+    load_model = None
+    pad_sequences = None
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import pandas as pd
@@ -182,6 +190,9 @@ st.markdown("""
 # ─────────────────────────────────────────
 @st.cache_resource
 def load_artifacts():
+    if not TENSORFLOW_AVAILABLE:
+        return None, None, None
+    
     model_path = os.path.join(MODEL_DIR, "lstm_fake_news_model.keras")
     tokenizer_path = os.path.join(MODEL_DIR, "tokenizer.pkl")
     metrics_path = os.path.join(MODEL_DIR, "metrics.json")
@@ -189,7 +200,11 @@ def load_artifacts():
     if not os.path.exists(model_path) or not os.path.exists(tokenizer_path):
         return None, None, None
 
-    model = load_model(model_path)
+    try:
+        model = load_model(model_path)
+    except Exception as e:
+        st.error(f"Error loading model: {str(e)}")
+        return None, None, None
 
     with open(tokenizer_path, "rb") as f:
         tokenizer = pickle.load(f)
@@ -266,8 +281,12 @@ if "🏠 Detect News" in page:
     st.markdown('<div class="sub-header">Powered by Bidirectional LSTM · Enter a news article to analyze</div>', unsafe_allow_html=True)
 
     if not model_loaded:
-        st.error("⚠️ Model not found! Please run `python model_training.py` first to train and save the model.")
-        st.code("python model_training.py", language="bash")
+        if not TENSORFLOW_AVAILABLE:
+            st.error("⚠️ TensorFlow is not available in this environment. The model requires TensorFlow to run.")
+            st.info("This is a known limitation with Python 3.14+. Please use Python 3.9-3.12 for deployment.")
+        else:
+            st.error("⚠️ Model not found! Please run `python model_training.py` first to train and save the model.")
+            st.code("python model_training.py", language="bash")
         st.stop()
 
     col1, col2 = st.columns([3, 2], gap="large")
