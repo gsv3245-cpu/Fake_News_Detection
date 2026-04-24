@@ -11,8 +11,8 @@ enableXsrfProtection = true
 level = "info"
 
 [theme]
-primaryColor = "#e63946"
-backgroundColor = "#070714"
-secondaryBackgroundColor = "#0d0d1a"
-textColor = "#e0e0e0"
+primaryColor = "#ff6b57"
+backgroundColor = "#08111f"
+secondaryBackgroundColor = "#0f1b2f"
+textColor = "#e8eef9"
 font = "sans serif"

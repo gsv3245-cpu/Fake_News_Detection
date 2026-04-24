@@ -1,0 +1,15 @@
+{
+  "Total Articles": 44898,
+  "Train Size": 35918,
+  "Test Size": 4490,
+  "Validation Size": 4490,
+  "Train Real Count": 17133,
+  "Train Fake Count": 18785,
+  "Test Real Count": 2142,
+  "Test Fake Count": 2348,
+  "Val Real Count": 2142,
+  "Val Fake Count": 2348,
+  "Train Percentage": "80.0%",
+  "Test Percentage": "10.0%",
+  "Validation Percentage": "10.0%"
+}

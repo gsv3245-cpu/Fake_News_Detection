@@ -27,3 +27,6 @@ ENV/
 *.pyc
 .ipynb_checkpoints/
 .cache/
+
+# Generated split files (reproducible via save_datasets.py)
+datasets/*.csv
