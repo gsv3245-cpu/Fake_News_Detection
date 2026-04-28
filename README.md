@@ -22,7 +22,7 @@ Primary objectives:
 fake_news_detection/
 │
 ├── app.py                          # 🎯 Streamlit dashboard (main application)
-├── Fake_News_Detection.ipynb       # 📓 Model training notebook
+├── model_training.ipynb            # 📓 Model training notebook
 ├── requirements.txt                # 📦 Python dependencies
 ├── README.md                       # 📄 This file
 │
@@ -77,7 +77,7 @@ If you want to retrain the model from scratch:
 pip install -r requirements.txt
 
 # 2. Open and run the training notebook
-jupyter notebook Fake_News_Detection.ipynb
+jupyter notebook model_training.ipynb
 ```
 
 This will:

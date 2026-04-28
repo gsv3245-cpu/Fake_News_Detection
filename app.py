@@ -589,7 +589,7 @@ elif page == "About":
     )
 
     st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-    st.write("Training notebook:", "Fake_News_Detection.ipynb")
+    st.write("Training notebook:", "model_training.ipynb")
     st.write("Artifacts path:", MODEL_DIR)
 
     st.subheader("Problem Statement")
